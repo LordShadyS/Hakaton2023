@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="container mt-3">
+  <div class="card my-4 mx-auto">
+    <div class="card-body m-2 m-md-4">
+      <article class="row">
+        <div class="col-5"><img src="{{ tutor_info['picture'] }}" class="img-fluid" alt=""></div>
+        <div class="col-7">
+
+          <section class="teacher=info">
+            <h1 class="h2">{{ tutor_info.name }}</h1>
+            <p><span class="badge badge-secondary mr-2">{{ tutor_info.study }}</span>Рейтинг: 😍{{ tutor_info.rating }} Ставка: {{ tutor_info.price }} / час</p>
+            <p>{{ tutor_info.about }}</p>
+          </section>
+
+          <section class="available">
+            <h4 class="mb-4 mt-5">Записаться на пробный урок</h4>
+            {% set weekdays = (
+              ('Понедельник', 'mon', 'monday'),
+              ('Вторник', 'tue', 'tuesday'),
+              ('Среда', 'wed', 'wednesday'),
+              ('Четверг', 'thu', 'thursday'),
+              ('Пятница', 'fri', 'friday'),
+              ('Суббота', 'sat', 'saturday'),
+              ('Воскресенье', 'sun', 'sunday')) %}
+            {% for day_rus, day_eng_short, day_eng_long in weekdays %}
+              <h6 class="mt-4">{{ day_rus }}</h6>
+              {% if tutor_info.free[day_eng_short].values()|select|first %}
+                {% for time, is_free in tutor_info.free[day_eng_short].items() %}
+                  {% if is_free %}
+                    <a href="{{ url_for('render_booking', tutor_id=tutor_info.id, class_day=day_eng_long, time=time) }}" class="btn btn-outline-success mr-2 my-2"
+                    >{{ time }} свободно</a>
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                <p>Нет свободных уроков</p> 
+              {% endif %}
+            {% endfor %}
+          </section>
+
+        </div>
+      </article>
+    </div>
+  </div>
+</main> 
+{% endblock content %}

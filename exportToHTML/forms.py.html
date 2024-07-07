@@ -1,0 +1,82 @@
+<html>
+<head>
+<title>forms.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+forms.py</font>
+</center></td></tr></table>
+<pre><span class="s0">from </span><span class="s1">flask_wtf </span><span class="s0">import </span><span class="s1">FlaskForm</span>
+<span class="s0">from </span><span class="s1">wtforms </span><span class="s0">import </span><span class="s1">StringField</span><span class="s2">, </span><span class="s1">RadioField</span><span class="s2">, </span><span class="s1">SubmitField</span><span class="s2">, </span><span class="s1">HiddenField</span><span class="s2">, </span><span class="s1">SelectField</span>
+<span class="s0">from </span><span class="s1">wtforms</span><span class="s2">.</span><span class="s1">validators </span><span class="s0">import </span><span class="s1">InputRequired</span>
+
+<span class="s0">from </span><span class="s1">func </span><span class="s0">import </span><span class="s1">get_data_from_db</span>
+
+
+<span class="s0">class </span><span class="s1">BookingForm</span><span class="s2">(</span><span class="s1">FlaskForm</span><span class="s2">):</span>
+
+
+    <span class="s1">tutor_id </span><span class="s2">= </span><span class="s1">HiddenField</span><span class="s2">()</span>
+    <span class="s1">class_day </span><span class="s2">= </span><span class="s1">HiddenField</span><span class="s2">()</span>
+    <span class="s1">time </span><span class="s2">= </span><span class="s1">HiddenField</span><span class="s2">()</span>
+    <span class="s1">name </span><span class="s2">= </span><span class="s1">StringField</span><span class="s2">(</span><span class="s3">&quot;Вас зовут&quot;</span><span class="s2">, [</span><span class="s1">InputRequired</span><span class="s2">(</span><span class="s3">&quot;Пожалуйста, введите ваше имя&quot;</span><span class="s2">)])</span>
+    <span class="s1">phone </span><span class="s2">= </span><span class="s1">StringField</span><span class="s2">(</span>
+        <span class="s3">&quot;Ваш телефон&quot;</span><span class="s2">, [</span><span class="s1">InputRequired</span><span class="s2">(</span><span class="s3">&quot;Пожалуйста, введите ваш номер телефона&quot;</span><span class="s2">)]</span>
+    <span class="s2">)</span>
+    <span class="s1">submit </span><span class="s2">= </span><span class="s1">SubmitField</span><span class="s2">(</span><span class="s3">&quot;Записаться на пробный урок&quot;</span><span class="s2">)</span>
+
+
+<span class="s0">class </span><span class="s1">RequestForm</span><span class="s2">(</span><span class="s1">FlaskForm</span><span class="s2">):</span>
+
+
+    <span class="s1">goal </span><span class="s2">= </span><span class="s1">RadioField</span><span class="s2">(</span>
+        <span class="s3">&quot;Какая цель занятий?&quot;</span><span class="s2">,</span>
+        <span class="s1">choices</span><span class="s2">=[</span>
+            <span class="s2">(</span><span class="s1">key</span><span class="s2">, </span><span class="s3">&quot; &quot;</span><span class="s2">.</span><span class="s1">join</span><span class="s2">(</span><span class="s1">value</span><span class="s2">))</span>
+            <span class="s0">for </span><span class="s1">key</span><span class="s2">, </span><span class="s1">value </span><span class="s0">in </span><span class="s1">get_data_from_db</span><span class="s2">(</span><span class="s1">option</span><span class="s2">=</span><span class="s3">&quot;goals&quot;</span><span class="s2">).</span><span class="s1">items</span><span class="s2">()</span>
+        <span class="s2">],</span>
+        <span class="s1">default</span><span class="s2">=</span><span class="s3">&quot;travel&quot;</span><span class="s2">,</span>
+    <span class="s2">)</span>
+
+    <span class="s1">time_for_practice </span><span class="s2">= </span><span class="s1">RadioField</span><span class="s2">(</span>
+        <span class="s3">&quot;Сколько времени есть?&quot;</span><span class="s2">,</span>
+        <span class="s1">choices</span><span class="s2">=[</span>
+            <span class="s2">(</span><span class="s1">key</span><span class="s2">, </span><span class="s1">value</span><span class="s2">)</span>
+            <span class="s0">for </span><span class="s1">key</span><span class="s2">, </span><span class="s1">value </span><span class="s0">in </span><span class="s1">get_data_from_db</span><span class="s2">(</span><span class="s1">option</span><span class="s2">=</span><span class="s3">&quot;time_for_practice&quot;</span><span class="s2">).</span><span class="s1">items</span><span class="s2">()</span>
+        <span class="s2">],</span>
+        <span class="s1">default</span><span class="s2">=</span><span class="s3">&quot;limit1_2&quot;</span><span class="s2">,</span>
+    <span class="s2">)</span>
+
+    <span class="s1">name </span><span class="s2">= </span><span class="s1">StringField</span><span class="s2">(</span><span class="s3">&quot;Вас зовут&quot;</span><span class="s2">, [</span><span class="s1">InputRequired</span><span class="s2">(</span><span class="s3">&quot;Пожалуйста, введите ваше имя&quot;</span><span class="s2">)])</span>
+    <span class="s1">phone </span><span class="s2">= </span><span class="s1">StringField</span><span class="s2">(</span>
+        <span class="s3">&quot;Ваш телефон&quot;</span><span class="s2">, [</span><span class="s1">InputRequired</span><span class="s2">(</span><span class="s3">&quot;Пожалуйста, введите ваш номер телефона&quot;</span><span class="s2">)]</span>
+    <span class="s2">)</span>
+    <span class="s1">submit </span><span class="s2">= </span><span class="s1">SubmitField</span><span class="s2">(</span><span class="s3">&quot;Найдите мне преподавателя!&quot;</span><span class="s2">)</span>
+
+
+<span class="s0">class </span><span class="s1">SortTutorsForm</span><span class="s2">(</span><span class="s1">FlaskForm</span><span class="s2">):</span>
+
+
+    <span class="s1">sort_by </span><span class="s2">= </span><span class="s1">SelectField</span><span class="s2">(</span>
+        <span class="s3">&quot;Сортировка преподавателей&quot;</span><span class="s2">,</span>
+        <span class="s1">choices</span><span class="s2">=[</span>
+            <span class="s2">(</span><span class="s3">&quot;random&quot;</span><span class="s2">, </span><span class="s3">&quot;В случайном порядке&quot;</span><span class="s2">),</span>
+            <span class="s2">(</span><span class="s3">&quot;high_rating_first&quot;</span><span class="s2">, </span><span class="s3">&quot;Сначала лучшие по рейтингу&quot;</span><span class="s2">),</span>
+            <span class="s2">(</span><span class="s3">&quot;high_price_first&quot;</span><span class="s2">, </span><span class="s3">&quot;Сначала дорогие&quot;</span><span class="s2">),</span>
+            <span class="s2">(</span><span class="s3">&quot;low_price_first&quot;</span><span class="s2">, </span><span class="s3">&quot;Сначала недорогие&quot;</span><span class="s2">),</span>
+        <span class="s2">],</span>
+        <span class="s1">default</span><span class="s2">=</span><span class="s3">&quot;random&quot;</span><span class="s2">,</span>
+    <span class="s2">)</span>
+    <span class="s1">submit </span><span class="s2">= </span><span class="s1">SubmitField</span><span class="s2">(</span><span class="s3">&quot;Сортировать&quot;</span><span class="s2">)</span>
+</pre>
+</body>
+</html>
